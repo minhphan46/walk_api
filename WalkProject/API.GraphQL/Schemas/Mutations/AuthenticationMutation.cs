@@ -1,21 +1,24 @@
 ﻿using WalkProject.API.GraphQL.DTOs.Authentication;
 using WalkProject.API.GraphQL.Resolvers;
+using WalkProject.DataModels.Entities;
 
 namespace WalkProject.API.GraphQL.Schemas.Mutations
 {
     [ExtendObjectType("Mutation")]
     public class AuthenticationMutation
     {
-        private readonly AuthenticationResolver resolver;
+        private readonly AuthenticationResolver authResolver;
+        private readonly UsersResolver usersResolver;
 
-        public AuthenticationMutation(AuthenticationResolver resolver)
+        public AuthenticationMutation(AuthenticationResolver authResolver, UsersResolver usersResolver)
         {
-            this.resolver = resolver;
+            this.authResolver = authResolver;
+            this.usersResolver = usersResolver;
         }
 
         public async Task<LoginResponse> Login(LoginInput loginInput)
         {
-            var respone = await resolver.LoginAsyc(loginInput.Email, loginInput.Password);
+            var respone = await authResolver.LoginAsyc(loginInput.Email, loginInput.Password);
 
             if (respone.AccessToken == null || respone.RefreshToken == null)
             {
@@ -26,7 +29,18 @@ namespace WalkProject.API.GraphQL.Schemas.Mutations
 
         public async Task<string> SignUp(RegisterInput registerInput)
         {
-            await resolver.RegisterAsyc(registerInput.Email, registerInput.Password);
+            var userRecord = await authResolver.RegisterAsyc(registerInput.Email, registerInput.Password);
+
+            var newUser = new User()
+            {
+                IdentityId = userRecord.Uid,
+                Email = userRecord.Email,
+                EmailVerified = userRecord.EmailVerified,
+                Username = userRecord.DisplayName,
+                RoleId = new Guid("bd8e2129-6568-4c38-b15a-b9fbdb64dc31")
+            };
+
+            await usersResolver.CreateAsync(newUser);
 
             return "User was registered! Please login.";
         }

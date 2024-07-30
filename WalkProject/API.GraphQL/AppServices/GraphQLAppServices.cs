@@ -1,7 +1,6 @@
 ﻿using AppAny.HotChocolate.FluentValidation;
 using FirebaseAdmin;
 using FirebaseAdminAuthentication.DependencyInjection.Extensions;
-using FirebaseAdminAuthentication.DependencyInjection.Models;
 using FluentValidation.AspNetCore;
 using Google.Apis.Auth.OAuth2;
 using WalkProject.API.GraphQL.DataLoaders;
@@ -16,6 +15,9 @@ using WalkProject.API.GraphQL.Schemas.Subscriptions;
 using WalkProject.API.GraphQL.Validators;
 using WalkProject.Utils;
 using NZWalks.GraphQL.DataLoaders;
+using WalkProject.Middlewares.Authorization;
+using WalkProject.Middlewares.Authorization.Rules;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WalkProject.API.GraphQL.AppServices
 {
@@ -30,6 +32,7 @@ namespace WalkProject.API.GraphQL.AppServices
             builder.Services.AddScoped<WalksResolver>();
             builder.Services.AddScoped<WalkCategoriesResolver>();
             builder.Services.AddScoped<AuthenticationResolver>();
+            builder.Services.AddSingleton<UsersResolver>();
 
             // DataLoader
             builder.Services.AddScoped<DifficultyDataLoader>();
@@ -62,6 +65,7 @@ namespace WalkProject.API.GraphQL.AppServices
                 .AddType<RegionMutation>()
                 .AddType<WalkMutation>()
                 .AddType<AuthenticationMutation>()
+                .AddType<UserMutation>()
                 .AddSubscriptionType(s => s.Name("Subscription"))
                 .AddType<CategoriesSubscription>()
                 .AddFiltering()
@@ -73,6 +77,9 @@ namespace WalkProject.API.GraphQL.AppServices
                     o.UseDefaultErrorMapper();
                 });
 
+            // Authorization
+            builder.Services.AddSingleton<IAuthorizationHandler, IsAdminHandler>();
+
             // Authentication
             var firebaseConfigPath = builder.Configuration.GetValue<string>("FIREBASE_CONFIG");
 
@@ -82,7 +89,9 @@ namespace WalkProject.API.GraphQL.AppServices
             }));
             builder.Services.AddFirebaseAuthentication();
             builder.Services.AddAuthorization(
-                o => o.AddPolicy("IsAdmin", p => p.RequireClaim(FirebaseUserClaimType.EMAIL, "test@test.com"))
+                o => o.AddPolicy("IsAdmin", p => p.AddRequirements(
+                        new IsAllowDeleted()
+                    ))
             );
 
             builder.Services.AddHttpClient<JwtProvider>((sp, HttpClient) =>
@@ -91,6 +100,8 @@ namespace WalkProject.API.GraphQL.AppServices
 
                 HttpClient.BaseAddress = new Uri(configuration["Authentication:TokenUri"]);
             });
+
+
 
             return builder;
         }

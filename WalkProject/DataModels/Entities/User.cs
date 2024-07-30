@@ -18,7 +18,8 @@ namespace WalkProject.DataModels.Entities
         public bool EmailVerified { get; set; }
         [Required]
         public Guid RoleId { get; set; }
-        [ForeignKey("RolesId")]
+
+        [ForeignKey("RoleId")]
         public Role Role { get; set; }
         public bool Status { get; set; }
     }

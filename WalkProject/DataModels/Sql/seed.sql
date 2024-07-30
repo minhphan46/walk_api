@@ -7,6 +7,7 @@ DELETE FROM [NZWalksDb].[dbo].[Categories];
 DELETE FROM [NZWalksDb].[dbo].[Walks];
 DELETE FROM [NZWalksDb].[dbo].[Regions];
 DELETE FROM [NZWalksDb].[dbo].[Difficulties];
+DELETE FROM [NZWalksDb].[dbo].[Users];
 GO
 
 -- Insert Difficulties
@@ -57,3 +58,10 @@ VALUES
 GO
 -- Repeat the above INSERT INTO [dbo].[WalkCategories] for the other walk-category associations
 -- ...
+
+-- Insert Users
+INSERT INTO [dbo].[Users] 
+(Id, IdentityId, Email, Username, Fullname, Dob, Address, Phone, EmailVerified, RoleId, Status, CreatedAt, UpdatedAt) 
+VALUES 
+('6035a10a-d052-4c93-8bbf-16e235e48dcf','4a459ae6-5f38-4a47-b257-0e79e504550f', 'test@test.com', 'admin', 'ADMIN', '1990-01-01', '123 Main St', '1234567890', 1, '9048e7ee-b63b-44ee-a93a-79cf1a904d86', 1, GETDATE(), GETDATE())
+GO

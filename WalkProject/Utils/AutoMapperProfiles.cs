@@ -2,6 +2,7 @@
 using WalkProject.API.GraphQL.DTOs.Categories;
 using WalkProject.API.GraphQL.DTOs.Difficulties;
 using WalkProject.API.GraphQL.DTOs.Regions;
+using WalkProject.API.GraphQL.DTOs.Users;
 using WalkProject.API.GraphQL.DTOs.Walks;
 using WalkProject.API.RestFul.DTOs.CategoryModel;
 using WalkProject.API.RestFul.DTOs.DifficultyModel;
@@ -46,6 +47,8 @@ namespace WalkProject.Utils
                 .ForSourceMember(x => x.Difficulty, opt => opt.DoNotValidate())
                 .ForSourceMember(x => x.Region, opt => opt.DoNotValidate())
                 .ReverseMap();
+            CreateMap<User, UserProfileInput>().ReverseMap();
+            CreateMap<Role, UserRoleInput>().ReverseMap();
         }
     }
 }
