@@ -37,5 +37,9 @@ namespace WalkProject.API.GraphQL.DTOs.Walks
             ICollection<WalkCategory> walkCategories = await dataLoader.LoadAsync(Id, CancellationToken.None);
             return walkCategories;
         }
+
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
     }
 }

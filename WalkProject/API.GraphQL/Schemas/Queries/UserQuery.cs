@@ -13,5 +13,9 @@ namespace WalkProject.API.GraphQL.Schemas.Queries
         {
             return user;
         }
+
+        // Get All Users
+
+        // Get User By Id
     }
 }

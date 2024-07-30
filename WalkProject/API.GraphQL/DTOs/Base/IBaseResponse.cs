@@ -7,5 +7,9 @@ namespace WalkProject.API.GraphQL.DTOs.Base
     {
         [Key]
         public Guid Id { get; set; }
+
+        public DateTime CreatedAt { get; set; }
+
+        public DateTime UpdatedAt { get; set; }
     }
 }

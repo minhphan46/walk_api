@@ -30,7 +30,6 @@ builder = GraphQLAppServices.AppBuilder(builder);
 // App builder
 var app = builder.Build();
 
-//if (app.Environment.IsDevelopment()){}
 app.UseSwagger();
 app.UseSwaggerUI();
 
