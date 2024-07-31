@@ -64,9 +64,6 @@ namespace WalkProject.API.GraphQL.Schemas.Mutations
                 throw new GraphQLException(new Error("User not found.", "USER_NOT_FOUND"));
             }
 
-            var userResponse = mapper.Map<UserResponse>(userDomainModel);
-
-
             return userDomainModel;
         }
     }

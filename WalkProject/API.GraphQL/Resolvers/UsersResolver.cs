@@ -62,7 +62,7 @@ namespace WalkProject.API.GraphQL.Resolvers
         {
             using (NZWalksDbContext context = _dbContextFactory.CreateDbContext())
             {
-                return await context.Users.ToListAsync();
+                return await context.Users.Include(u => u.Role).ToListAsync();
             }
         }
 
@@ -71,7 +71,7 @@ namespace WalkProject.API.GraphQL.Resolvers
         {
             using (NZWalksDbContext context = _dbContextFactory.CreateDbContext())
             {
-                return await context.Users.FirstOrDefaultAsync(x => x.Id == id);
+                return await context.Users.Include(u => u.Role).FirstOrDefaultAsync(x => x.Id == id);
             }
         }
 
@@ -105,11 +105,11 @@ namespace WalkProject.API.GraphQL.Resolvers
         }
 
         // Update User
-        public async Task<User> UpdateAsync(string idIdentityId, User user)
+        public async Task<User> UpdateAsync(string identityId, User user)
         {
             using (NZWalksDbContext context = _dbContextFactory.CreateDbContext())
             {
-                var existingUser = await GetByIdentityIdAsync(idIdentityId);
+                var existingUser = await context.Users.FirstOrDefaultAsync(x => x.IdentityId == identityId);
 
                 if (existingUser == null)
                 {
