@@ -1,9 +1,9 @@
 ﻿using FirebaseAdminAuthentication.DependencyInjection.Models;
 using Microsoft.AspNetCore.Authorization;
 using WalkProject.API.GraphQL.Resolvers;
-using WalkProject.Middlewares.Authorization.Rules;
+using WalkProject.Authentication.Authorization.Rules;
 
-namespace WalkProject.Middlewares.Authorization
+namespace WalkProject.Authentication.Authorization
 {
     public class IsAdminHandler : AuthorizationHandler<IsAllowDeleted>
     {

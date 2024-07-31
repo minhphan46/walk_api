@@ -1,7 +1,5 @@
-﻿using AppAny.HotChocolate.FluentValidation;
-using AutoMapper;
+﻿using AutoMapper;
 using HotChocolate.Authorization;
-using WalkProject.API.GraphQL.DTOs.Categories;
 using WalkProject.API.GraphQL.DTOs.Users;
 using WalkProject.API.GraphQL.Resolvers;
 using WalkProject.DataModels.Entities;

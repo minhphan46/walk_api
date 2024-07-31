@@ -1,8 +1,5 @@
 ﻿using AppAny.HotChocolate.FluentValidation;
-using FirebaseAdmin;
-using FirebaseAdminAuthentication.DependencyInjection.Extensions;
 using FluentValidation.AspNetCore;
-using Google.Apis.Auth.OAuth2;
 using WalkProject.API.GraphQL.DataLoaders;
 using WalkProject.API.GraphQL.DTOs.Categories;
 using WalkProject.API.GraphQL.DTOs.Difficulties;
@@ -13,11 +10,7 @@ using WalkProject.API.GraphQL.Schemas.Mutations;
 using WalkProject.API.GraphQL.Schemas.Queries;
 using WalkProject.API.GraphQL.Schemas.Subscriptions;
 using WalkProject.API.GraphQL.Validators;
-using WalkProject.Utils;
 using NZWalks.GraphQL.DataLoaders;
-using WalkProject.Middlewares.Authorization;
-using WalkProject.Middlewares.Authorization.Rules;
-using Microsoft.AspNetCore.Authorization;
 
 namespace WalkProject.API.GraphQL.AppServices
 {
@@ -76,31 +69,6 @@ namespace WalkProject.API.GraphQL.AppServices
                 {
                     o.UseDefaultErrorMapper();
                 });
-
-            // Authorization
-            builder.Services.AddSingleton<IAuthorizationHandler, IsAdminHandler>();
-
-            // Authentication
-            var firebaseConfigPath = builder.Configuration.GetValue<string>("FIREBASE_CONFIG");
-
-            builder.Services.AddSingleton(FirebaseApp.Create(new AppOptions()
-            {
-                Credential = GoogleCredential.FromFile(firebaseConfigPath)
-            }));
-            builder.Services.AddFirebaseAuthentication();
-            builder.Services.AddAuthorization(
-                o => o.AddPolicy("IsAdmin", p => p.AddRequirements(
-                        new IsAllowDeleted()
-                    ))
-            );
-
-            builder.Services.AddHttpClient<JwtProvider>((sp, HttpClient) =>
-            {
-                var configuration = sp.GetRequiredService<IConfiguration>();
-
-                HttpClient.BaseAddress = new Uri(configuration["Authentication:TokenUri"]);
-            });
-
 
 
             return builder;

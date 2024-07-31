@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 
-namespace WalkProject.Middlewares.Authorization.Rules
+namespace WalkProject.Authentication.Authorization.Rules
 {
     public class IsAllowedGetUsers : IAuthorizationRequirement
     {

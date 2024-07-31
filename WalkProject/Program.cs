@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using WalkProject.API.GraphQL.AppServices;
 using WalkProject.API.RestFul.AppServices;
+using WalkProject.Authentication.AppServices;
 using WalkProject.DataModels.DbContexts;
 using WalkProject.Loggers;
 using WalkProject.Middlewares;
@@ -25,6 +26,8 @@ builder = LoggerServices.AppBuilder(builder);
 builder = RestfulAppServices.AppBuilder(builder);
 
 builder = GraphQLAppServices.AppBuilder(builder);
+
+builder = AuthAppServices.AppBuilder(builder);
 
 
 // App builder
